@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-vllm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Build vllm image
+        run: docker build -t test-vllm ./images/vllm
+
+      - name: Verify openssh-server installed
+        run: docker run --rm test-vllm which sshd
+
+      - name: Verify sudo installed
+        run: docker run --rm test-vllm which sudo
+
+      - name: Verify dstack user exists
+        run: docker run --rm test-vllm id dstack
+
+      - name: Verify dstack user has sudo
+        run: docker run --rm test-vllm sudo -n true
