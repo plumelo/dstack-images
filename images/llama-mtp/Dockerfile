@@ -11,15 +11,20 @@ RUN git clone https://github.com/ggml-org/llama.cpp.git . && \
     git fetch origin pull/22673/head:mtp-pr && \
     git checkout mtp-pr
 
-ENV CUDA_STUBS=/usr/local/cuda/lib64/stubs
-RUN cmake -B build \
+WORKDIR /app
+RUN git clone https://github.com/ggml-org/llama.cpp.git . && \
+    git fetch origin pull/22673/head:mtp-pr && \
+    git checkout mtp-pr
+
+RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/lib/libcuda.so.1 && \
+    ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/lib/libcuda.so && \
+    cmake -B build \
       -DGGML_CUDA=ON \
       -DGGML_NATIVE=OFF \
       -DCMAKE_CUDA_ARCHITECTURES="86;89;90;120" \
       -DCMAKE_BUILD_TYPE=Release \
       -DGGML_CUDA_GRAPHS=ON \
-      -DLLAMA_BUILD_TESTS=OFF \
-      -DCMAKE_EXE_LINKER_FLAGS="-L${CUDA_STUBS}" && \
+      -DLLAMA_BUILD_TESTS=OFF && \
     cmake --build build --config Release --target llama-server -j$(nproc)
 
 FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04
