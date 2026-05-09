@@ -23,7 +23,7 @@ RUN cmake -B build \
 FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      openssh-server sudo curl libgomp1 && \
+      openssh-server sudo curl unzip libgomp1 && \
     sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config && \
     mkdir /run/sshd && \
     rm -f /etc/ssh/ssh_host_* && \
@@ -39,9 +39,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     fi && \
     echo 'dstack ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/dstack && \
     mkdir -p /dstack/run && chmod a+rwx /dstack/run && \
+    curl -fsSL https://rclone.org/install.sh | bash && \
     rm -rf /var/lib/apt/lists/*
-
-RUN curl -fsSL https://rclone.org/install.sh | bash
 
 COPY --from=build /app/build/bin/llama-server /usr/local/bin/llama-server
 COPY --from=build /app/build/lib /usr/local/lib
