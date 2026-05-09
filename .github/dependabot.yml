@@ -9,3 +9,8 @@ updates:
     directory: "/images/vllm"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/images/llama-mtp"
+    schedule:
+      interval: "weekly"
