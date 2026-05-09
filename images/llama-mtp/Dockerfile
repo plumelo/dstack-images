@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.8.1-devel-ubuntu24.04 AS build
+FROM nvidia/cuda:13.2.1-devel-ubuntu24.04 AS build
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
       gcc-14 g++-14 build-essential cmake git python3 libssl-dev && \
@@ -27,7 +27,7 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/lib/libcuda.so.1 && 
       -DLLAMA_BUILD_TESTS=OFF && \
     cmake --build build --config Release --target llama-server -j$(nproc)
 
-FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04
+FROM nvidia/cuda:13.2.1-runtime-ubuntu24.04
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
       openssh-server sudo curl unzip libgomp1 && \
