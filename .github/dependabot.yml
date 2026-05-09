@@ -11,6 +11,6 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "docker"
-    directory: "/images/llama-mtp"
+    directory: "/images/vllm-nightly"
     schedule:
       interval: "weekly"

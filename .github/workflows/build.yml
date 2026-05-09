@@ -53,7 +53,7 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
-  build-llama-mtp:
+  build-vllm-nightly:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -77,14 +77,14 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=llama-mtp-latest
+            type=raw,value=vllm-nightly-latest
             type=sha,prefix=
 
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v7
         with:
-          context: ./images/llama-mtp
+          context: ./images/vllm-nightly
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

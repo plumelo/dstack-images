@@ -26,26 +26,23 @@ jobs:
       - name: Verify dstack user has sudo
         run: docker run --rm test-vllm sudo -n true
 
-  check-llama-mtp:
+  check-vllm-nightly:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Build llama-mtp image
-        run: docker build -t test-llama-mtp ./images/llama-mtp
+      - name: Build vllm-nightly image
+        run: docker build -t test-vllm-nightly ./images/vllm-nightly
 
       - name: Verify openssh-server installed
-        run: docker run --rm test-llama-mtp which sshd
+        run: docker run --rm test-vllm-nightly which sshd
 
       - name: Verify sudo installed
-        run: docker run --rm test-llama-mtp which sudo
+        run: docker run --rm test-vllm-nightly which sudo
 
       - name: Verify dstack user exists
-        run: docker run --rm test-llama-mtp id dstack
+        run: docker run --rm test-vllm-nightly id dstack
 
-      - name: Verify llama-server binary exists
-        run: docker run --rm test-llama-mtp which llama-server
-
-      - name: Verify rclone installed
-        run: docker run --rm test-llama-mtp rclone version
+      - name: Verify dstack user has sudo
+        run: docker run --rm test-vllm-nightly sudo -n true
