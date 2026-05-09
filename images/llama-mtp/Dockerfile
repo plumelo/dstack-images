@@ -27,8 +27,16 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config && \
     mkdir /run/sshd && \
     rm -f /etc/ssh/ssh_host_* && \
-    groupadd -g 1000 dstack && \
-    useradd -u 1000 -g 1000 -G sudo -s /bin/bash -m dstack && \
+    if id 1000 >/dev/null 2>&1; then \
+      EXISTING_USER=$(id -nu 1000); \
+      EXISTING_GROUP=$(getent group 1000 | cut -d: -f1); \
+      usermod -l dstack -d /home/dstack -m "$EXISTING_USER"; \
+      groupmod -n dstack "$EXISTING_GROUP"; \
+      usermod -aG sudo dstack; \
+    else \
+      groupadd -g 1000 dstack && \
+      useradd -u 1000 -g 1000 -G sudo -s /bin/bash -m dstack; \
+    fi && \
     echo 'dstack ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/dstack && \
     mkdir -p /dstack/run && chmod a+rwx /dstack/run && \
     rm -rf /var/lib/apt/lists/*
