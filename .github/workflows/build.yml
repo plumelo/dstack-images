@@ -35,7 +35,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=vllm-latest
-            type=sha,prefix=
+            type=sha,prefix=vllm-
 
       - name: Build and push Docker image
         id: push
@@ -78,7 +78,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=vllm-nightly-latest
-            type=sha,prefix=
+            type=sha,prefix=vllm-nightly-
 
       - name: Build and push Docker image
         id: push
