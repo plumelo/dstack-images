@@ -46,3 +46,24 @@ jobs:
 
       - name: Verify dstack user has sudo
         run: docker run --rm test-vllm-nightly sudo -n true
+
+  check-llamacpp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Build llamacpp image
+        run: docker build -t test-llamacpp ./images/llamacpp
+
+      - name: Verify openssh-server installed
+        run: docker run --rm test-llamacpp which sshd
+
+      - name: Verify sudo installed
+        run: docker run --rm test-llamacpp which sudo
+
+      - name: Verify dstack user exists
+        run: docker run --rm test-llamacpp id dstack
+
+      - name: Verify dstack user has sudo
+        run: docker run --rm test-llamacpp sudo -n true

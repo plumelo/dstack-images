@@ -18,6 +18,13 @@ Same as vllm but based on `vllm/vllm-openai:nightly` — bleeding edge vLLM buil
 - **Tag**: `ghcr.io/plumelo/dstack-images:vllm-nightly-latest`
 - **What's added**: openssh-server, sudo, dstack user (uid/gid 1000), `/dstack/run`
 
+### llamacpp
+
+Based on `ghcr.io/ggml-org/llama.cpp:server-cuda` with pre-installed dstack runner prerequisites. Includes MTP (multi-token prediction) support and the Jinja-based autoparser for automatic tool call detection.
+
+- **Tag**: `ghcr.io/plumelo/dstack-images:llamacpp-latest`
+- **What's added**: openssh-server, sudo, dstack user (uid/gid 1000), `/dstack/run`
+
 ## Usage
 
 ```yaml
@@ -36,6 +43,14 @@ image: ghcr.io/plumelo/dstack-images:vllm-nightly-latest
 commands:
   - |
     vllm serve $MODEL_ID --host 0.0.0.0 --port 8000 ...
+
+# llama.cpp
+type: service
+name: my-llamacpp
+image: ghcr.io/plumelo/dstack-images:llamacpp-latest
+commands:
+  - |
+    /app/llama-server --hf-repo $MODEL_REPO --hf-file $MODEL_FILE --port 8000 ...
 ```
 
 ## Cold start improvement
@@ -47,5 +62,5 @@ commands:
 
 ## CI/CD
 
-- **Push to main**: builds and pushes both image tags + SHA tags
+- **Push to main**: builds and pushes all image tags + SHA tags
 - **PR**: builds and runs verification checks per image
