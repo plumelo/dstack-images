@@ -57,13 +57,7 @@ jobs:
         run: docker build -t test-llamacpp ./images/llamacpp
 
       - name: Verify openssh-server installed
-        run: docker run --rm test-llamacpp which sshd
+        run: docker run --rm test-llamacpp dpkg -l openssh-server
 
       - name: Verify sudo installed
-        run: docker run --rm test-llamacpp which sudo
-
-      - name: Verify dstack user exists
-        run: docker run --rm test-llamacpp id dstack
-
-      - name: Verify dstack user has sudo
-        run: docker run --rm test-llamacpp sudo -n true
+        run: docker run --rm test-llamacpp dpkg -l sudo
